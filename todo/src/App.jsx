@@ -4,38 +4,34 @@ function App() {
   const [dark, setDark] = useState(true);
   const [todoArr, setTodoArr] = useState([]);
   const [checkedOut, setCheckedOut] = useState(todoArr);
-  const [completedTasks, setCompletedTasks] = useState([])
-  const [filterArr, setFilterArr] = useState("All")
+  const [completedTasks, setCompletedTasks] = useState([]);
+  const [filterArr, setFilterArr] = useState("All");
   const [text, setText] = useState({
     todoText: "",
   });
-  const local = JSON.parse(localStorage.getItem("ARR"))
+  const local = JSON.parse(localStorage.getItem("ARR"));
   useEffect(() => {
-    setTodoArr(local)
-  }, [])
-
+    setTodoArr(local);
+  }, []);
 
   useEffect(() => {
-    if (filterArr === "Completed")
-    {
-      setCheckedOut(todoArr.filter((tasks) => {
-        return tasks.complete === true;
-      }))
-    } else if (filterArr === "Active")
-    {
+    if (filterArr === "Completed") {
+      setCheckedOut(
+        todoArr.filter((tasks) => {
+          return tasks.complete === true;
+        })
+      );
+    } else if (filterArr === "Active") {
       console.log("active");
       setCheckedOut(
         todoArr.filter((tasks) => {
-          return tasks.complete === false
-          
+          return tasks.complete === false;
         })
       );
-    } else
-    {
-      setCheckedOut(todoArr)
+    } else {
+      setCheckedOut(todoArr);
     }
-
-  }, [filterArr, todoArr])
+  }, [filterArr, todoArr]);
 
   const sortedArr = checkedOut.sort((a, b) => b.date - a.date);
   const mappedArr = sortedArr.map((item, index) => {
@@ -44,8 +40,8 @@ function App() {
         key={index}
         className={
           dark
-            ? "flex justify-between items-center p-5 todo dark relative rounded-lg"
-            : "flex justify-between items-center max-w-[500px] p-5  todo light relative rounded-lg"
+            ? "flex justify-between items-center p-5 todo dark relative odd:bg-[#5b5b5b] even:bg-[#262626]"
+            : "flex justify-between items-center p-5 odd:bg-white even:bg-slate-300 todo light relative"
         }
       >
         <div className="flex gap-4 items-center w-full">
@@ -120,32 +116,31 @@ function App() {
   function checked(id) {
     setTodoArr(
       todoArr.map((todo, index) => {
-        if(index === id) {
+        if (index === id) {
           return {
-              ...todo,
-             complete : !todo.complete
-            }
-          }
-        return todo
+            ...todo,
+            complete: !todo.complete,
+          };
+        }
+        return todo;
       })
-    )
+    );
   }
 
   const addTodo = () => {
-    setTodoArr((prev) => ([
+    setTodoArr((prev) => [
       ...prev,
-      { 
+      {
         text: text.todoText,
         date: Date.now(),
         complete: false,
       },
-    ]));
+    ]);
     setText({
-       todoText : ""
-    })
+      todoText: "",
+    });
     setFilterArr("All");
-   
-  }
+  };
 
   useEffect(() => {
     localStorage.setItem("ARR", JSON.stringify(todoArr));
@@ -162,11 +157,44 @@ function App() {
   }
 
   return (
-    <section className="flex gap-5 flex-col justify-center items-center min-h-[100vh]">
-      <div>
-        <h1 className="text-[4rem]">
-          TO DO
-        </h1>
+    <section
+      className={
+        dark
+          ? "flex gap-5 flex-col justify-center items-center min-h-[100vh] duration-300 dark:bg-[#393939] dark:*:text-slate-200"
+          : "flex gap-5 flex-col justify-center items-center min-h-[100vh] duration-300"
+      }
+    >
+      <div className="flex justify-between w-full items-center p-5">
+        <h1 className="text-[4rem]">TO DO</h1>
+        <div>
+          <label htmlFor="theme" className="theme">
+            <span className="theme__toggle-wrap">
+              <input
+                id="theme"
+                className="theme__toggle"
+                type="checkbox"
+                name="theme"
+                value="dark"
+                checked={dark}
+                onChange={() => setDark(!dark)}
+              />
+              <span className="theme__fill"></span>
+              <span className="theme__icon flex items-center justify-center">
+                <div className="">
+                  <span className="theme__icon-part"></span>
+                  <span className="theme__icon-part"></span>
+                  <span className="theme__icon-part"></span>
+                  <span className="theme__icon-part"></span>
+                  <span className="theme__icon-part"></span>
+                  <span className="theme__icon-part"></span>
+                  <span className="theme__icon-part"></span>
+                  <span className="theme__icon-part"></span>
+                  <span className="theme__icon-part"></span>
+                </div>
+              </span>
+            </span>
+          </label>
+        </div>
       </div>
       <div className="flex items-center justify-between p-2 ring ring-gray-400">
         <div>
@@ -175,13 +203,10 @@ function App() {
             value={text.todoText}
             name="todoText"
             onChange={handleChange}
-            className="outline-none p-5"
+            className="outline-none p-5 bg-transparent"
           />
         </div>
-        <div
-          className=""
-          onClick={addTodo}
-        >
+        <div className="" onClick={addTodo}>
           <button
             title="Add New Todo"
             className="group cursor-pointer outline-none hover:rotate-90 duration-300"
@@ -204,7 +229,13 @@ function App() {
         </div>
       </div>
       <div className="divide-y flex flex-col gap-3 items-center w-[600px] justify-center">
-        <div className="flex flex-col items-center divide-y justify-center *:my-2 *:w-full w-full">
+        <div
+          className={
+            dark
+              ? "flex flex-col items-center justify-center *:my-2 *:w-full w-full"
+              : "flex flex-col items-center justify-center *:my-2 *:w-full w-full"
+          }
+        >
           {checkedOut.length ? mappedArr : <p>No tasks here</p>}
         </div>
       </div>
@@ -213,14 +244,14 @@ function App() {
         <div className="flex items-center gap-3">
           <p
             onClick={() => setFilterArr("All")}
-            className={filterArr === "All" ? "text-blue-800" : "text-slate-700"}
+            className={filterArr === "All" ? "text-blue-600" : "text-slate-400"}
           >
             All
           </p>
           <p
             onClick={() => setFilterArr("Active")}
             className={
-              filterArr === "Active" ? "text-blue-800" : "text-slate-700"
+              filterArr === "Active" ? "text-blue-600" : "text-slate-400"
             }
           >
             Active
@@ -228,7 +259,7 @@ function App() {
           <p
             onClick={() => setFilterArr("Completed")}
             className={
-              filterArr === "Completed" ? "text-blue-800" : "text-slate-700"
+              filterArr === "Completed" ? "text-blue-600" : "text-slate-400"
             }
           >
             Completed
