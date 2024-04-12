@@ -11,7 +11,11 @@ function App() {
   });
   const local = JSON.parse(localStorage.getItem("ARR"));
   useEffect(() => {
-    setTodoArr(local);
+    if (local) {
+      setTodoArr(local);
+    } else {
+      setTodoArr([]);
+    }
   }, []);
 
   useEffect(() => {
@@ -40,8 +44,8 @@ function App() {
         key={index}
         className={
           dark
-            ? "flex justify-between items-center p-5 todo dark relative odd:bg-[#5b5b5b] even:bg-[#262626]"
-            : "flex justify-between items-center p-5 odd:bg-white even:bg-slate-300 todo light relative"
+            ? "flex justify-between items-center max-w-full todo dark relative odd:bg-[#5b5b5b] even:bg-[#262626]"
+            : "flex justify-between items-center max-w-full odd:bg-white even:bg-slate-300 todo light relative"
         }
       >
         <div className="flex gap-4 items-center w-full">
@@ -57,7 +61,6 @@ function App() {
               <div className="checkmark"></div>
             </label>
 
-            {/* <label htmlFor="cbx" className="cbx"></label> */}
           </div>
           <div>
             <p>{item.text}</p>
@@ -111,7 +114,6 @@ function App() {
     );
   });
 
-  // const checkedTodo = document.querySelectorAll(".checkedTodo")
 
   function checked(id) {
     setTodoArr(
@@ -164,7 +166,7 @@ function App() {
           : "flex gap-5 flex-col justify-center items-center min-h-[100vh] duration-300"
       }
     >
-      <div className="flex justify-between w-full items-center p-5">
+      <div className="flex justify-between w-full items-center sm:p-5 p-2">
         <h1 className="text-[4rem]">TO DO</h1>
         <div>
           <label htmlFor="theme" className="theme">
@@ -228,18 +230,18 @@ function App() {
           </button>
         </div>
       </div>
-      <div className="divide-y flex flex-col gap-3 items-center w-[600px] justify-center">
+      <div className="divide-y flex flex-col gap-3 items-center w-full max-w-[600px] justify-center">
         <div
           className={
             dark
-              ? "flex flex-col items-center justify-center *:my-2 *:w-full w-full"
-              : "flex flex-col items-center justify-center *:my-2 *:w-full w-full"
+              ? "flex flex-col items-center justify-center *:p-3 sm:p-5 *:my-2 *:w-full w-full"
+              : "flex flex-col items-center justify-center *:p-3 sm:p-5 *:my-2 *:w-full w-full"
           }
         >
           {checkedOut.length ? mappedArr : <p>No tasks here</p>}
         </div>
       </div>
-      <div className="flex justify-between space-x-11 items-center p-5">
+      <div className="flex justify-between gap-3 sm:gap-4 items-center p-2">
         <div>{completedTasks.length} items left </div>
         <div className="flex items-center gap-3">
           <p
